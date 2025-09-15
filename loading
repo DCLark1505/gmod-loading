@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading - Savage RP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #9b59b6, #3498db);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .cityscape {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            z-index: 1;
+        }
+
+        .cityscape::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background-image: 
+                polygon(0% 100%, 8% 60%, 12% 80%, 18% 40%, 25% 70%, 30% 30%, 35% 65%, 42% 25%, 48% 75%, 55% 35%, 62% 80%, 68% 20%, 75% 60%, 82% 45%, 88% 85%, 95% 50%, 100% 90%, 100% 100%);
+            background: linear-gradient(to top, #1a1a1a, #2c3e50);
+            clip-path: polygon(0% 100%, 8% 60%, 12% 80%, 18% 40%, 25% 70%, 30% 30%, 35% 65%, 42% 25%, 48% 75%, 55% 35%, 62% 80%, 68% 20%, 75% 60%, 82% 45%, 88% 85%, 95% 50%, 100% 90%, 100% 100%);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite linear;
+        }
+
+        .shape:nth-child(1) { 
+            width: 80px; height: 80px; 
+            border-radius: 50%; 
+            left: 10%; 
+            animation-delay: 0s; 
+            background: rgba(231, 60, 126, 0.3);
+        }
+        .shape:nth-child(2) { 
+            width: 60px; height: 60px; 
+            left: 20%; 
+            animation-delay: 3s;
+            background: rgba(35, 166, 213, 0.3);
+            transform: rotate(45deg);
+        }
+        .shape:nth-child(3) { 
+            width: 100px; height: 100px; 
+            border-radius: 50%; 
+            left: 60%; 
+            animation-delay: 6s;
+            background: rgba(35, 213, 171, 0.3);
+        }
+        .shape:nth-child(4) { 
+            width: 40px; height: 40px; 
+            left: 80%; 
+            animation-delay: 9s;
+            background: rgba(155, 89, 182, 0.3);
+            border-radius: 30%;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            to {
+                transform: translateY(-200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+            min-height: 100vh;
+        }
+
+        .left-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            margin-top: 50px;
+        }
+
+        .right-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            margin-top: 50px;
+        }
+
+        .server-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .server-logo {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(231, 60, 126, 0.8);
+            background: linear-gradient(45deg, #e73c7e, #23a6d5, #23d5ab, #ee7752);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { 
+                background-position: 0% 50%; 
+                filter: drop-shadow(0 0 20px rgba(231, 60, 126, 0.8));
+            }
+            100% { 
+                background-position: 100% 50%; 
+                filter: drop-shadow(0 0 20px rgba(35, 166, 213, 0.8));
+            }
+        }
+
+        .server-tagline {
+            font-size: 1.3em;
+            color: #23d5ab;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(35, 213, 171, 0.5);
+        }
+
+        .loading-section {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .loading-text {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #23a6d5;
+            text-shadow: 0 2px 10px rgba(35, 166, 213, 0.5);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e73c7e, #23a6d5, #23d5ab, #ee7752);
+            border-radius: 20px;
+            width: 0%;
+            animation: loading 12s ease-in-out infinite;
+            position: relative;
+            box-shadow: 0 0 20px rgba(35, 166, 213, 0.6);
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            25% { width: 30%; }
+            50% { width: 65%; }
+            75% { width: 85%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .server-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(231, 60, 126, 0.2), rgba(35, 166, 213, 0.2));
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: cardShimmer 3s infinite;
+        }
+
+        @keyframes cardShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(35, 166, 213, 0.4);
+            border-color: #23a6d5;
+        }
+
+        .info-card h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: #23d5ab;
+            text-shadow: 0 2px 5px rgba(35, 213, 171, 0.5);
+        }
+
+        .info-card p {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .jobs-section {
+            margin: 25px 0;
+        }
+
+        .jobs-title {
+            font-size: 1.5em;
+            color: #ee7752;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(238, 119, 82, 0.5);
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .job-item {
+            background: rgba(155, 89, 182, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .job-item:hover {
+            background: rgba(155, 89, 182, 0.4);
+            transform: scale(1.05);
+        }
+
+        .rules-section {
+            background: rgba(231, 60, 126, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(231, 60, 126, 0.3);
+            margin-top: 20px;
+        }
+
+        .rules-title {
+            font-size: 1.8em;
+            color: #e73c7e;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 15px rgba(231, 60, 126, 0.7);
+        }
+
+        .rules-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .rule-category {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid;
+        }
+
+        .rule-category:nth-child(1) { border-left-color: #e73c7e; }
+        .rule-category:nth-child(2) { border-left-color: #23a6d5; }
+        .rule-category:nth-child(3) { border-left-color: #23d5ab; }
+        .rule-category:nth-child(4) { border-left-color: #ee7752; }
+        .rule-category:nth-child(5) { border-left-color: #9b59b6; }
+
+        .rule-category h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .rule-category:nth-child(1) h4 { color: #e73c7e; }
+        .rule-category:nth-child(2) h4 { color: #23a6d5; }
+        .rule-category:nth-child(3) h4 { color: #23d5ab; }
+        .rule-category:nth-child(4) h4 { color: #ee7752; }
+        .rule-category:nth-child(5) h4 { color: #9b59b6; }
+
+        .rule-category ul {
+            list-style: none;
+        }
+
+        .rule-category li {
+            margin: 5px 0;
+            padding-left: 15px;
+            position: relative;
+            font-size: 0.95em;
+        }
+
+        .rule-category li:before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: inherit;
+            font-size: 0.8em;
+        }
+
+        .discord-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .discord-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #7289da, #5b6eae);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(114, 137, 218, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .discord-link:hover {
+            background: linear-gradient(45deg, #5b6eae, #4752c4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(114, 137, 218, 0.6);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .jobs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .server-logo {
+                font-size: 2.5em;
+            }
+            
+            .server-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cityscape"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <div class="left-panel">
+            <div class="server-header">
+                <h1 class="server-logo">DARKRP CITY</h1>
+                <p class="server-tagline">Live Your Criminal Life</p>
+            </div>
+            
+            <div class="loading-section">
+                <div class="loading-text" id="loadingText">Entering the savage world...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            
+            <div class="server-info">
+                <div class="info-card">
+                    <h3>🎮 Gamemode</h3>
+                    <p>DarkRP</p>
+                </div>
+                <div class="info-card">
+                    <h3>👥 Max Players</h3>
+                    <p>10 Players</p>
+                </div>
+                <div class="info-card">
+                    <h3>🌍 Location</h3>
+                    <p>US East</p>
+                </div>
+                <div class="info-card">
+                    <h3>💼 Jobs Available</h3>
+                    <p>25+ Jobs</p>
+                </div>
+            </div>
+
+            <div class="jobs-section">
+                <h3 class="jobs-title">🏢 Available Jobs</h3>
+                <div class="jobs-grid">
+                    <div class="job-item">👮 Police Officer</div>
+                    <div class="job-item">🚓 Police Chief</div>
+                    <div class="job-item">🚨 SWAT Officer</div>
+                    <div class="job-item">👨‍⚕️ Medic</div>
+                    <div class="job-item">🔫 Gun Dealer</div>
+                    <div class="job-item">🚗 Car Dealer</div>
+                    <div class="job-item">🏪 Shop Owner</div>
+                    <div class="job-item">🍕 Pizza Delivery</div>
+                    <div class="job-item">🔨 Mechanic</div>
+                    <div class="job-item">🏗️ Builder</div>
+                    <div class="job-item">🎭 Entertainer</div>
+                    <div class="job-item">📰 News Reporter</div>
+                    <div class="job-item">🎵 DJ</div>
+                    <div class="job-item">🏛️ Mayor</div>
+                    <div class="job-item">👔 Businessman</div>
+                    <div class="job-item">💰 Bank Manager</div>
+                    <div class="job-item">🚛 Trucker</div>
+                    <div class="job-item">🔧 Engineer</div>
+                    <div class="job-item">🛡️ Security Guard</div>
+                    <div class="job-item">👨‍🍳 Chef</div>
+                    <div class="job-item">📚 Librarian</div>
+                    <div class="job-item">🚖 Taxi Driver</div>
+                    <div class="job-item">🏪 Bartender</div>
+                    <div class="job-item">💊 Drug Dealer</div>
+                    <div class="job-item">🔫 Hitman</div>
+                </div>
+            </div>
+
+            <div class="discord-section">
+                <a href="#" class="discord-link">🎮 Join Our Discord</a>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="rules-section">
+                <h2 class="rules-title">📋 SERVER RULES</h2>
+                <div class="rules-grid">
+                    <div class="rule-category">
+                        <h4>🚫 General Rules</h4>
+                        <ul>
+                            <li>No Random Death Match (RDM)</li>
+                            <li>No Random Arrest (RDA)</li>
+                            <li>No Voice/Chat spam</li>
+                            <li>Respect all players and staff</li>
+                            <li>English only in main chat</li>
+                            <li>No advertising other servers</li>
+                            <li>No offensive names or content</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rule-category">
+                        <h4>🎭 Roleplay Rules</h4>
+                        <ul>
+                            <li>Stay in character at all times</li>
+                            <li>Follow New Life Rule (NLR) - 3 minutes</li>
+                            <li>No FailRP (unrealistic roleplay)</li>
+                            <li>No MetaGaming (using OOC info in RP)</li>
+                            <li>No PowerGaming (forcing actions on others)</li>
+                            <li>Use /advert for raids, mugs, kidnaps</li>
+                            <li>Wait 10 minutes between raids on same person</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rule-category">
+                        <h4>🏢 Job-Specific Rules</h4>
+                        <ul>
+                            <li>Police: Only arrest for valid reasons</li>
+                            <li>Mayor: Set reasonable laws</li>
+                            <li>Gun Dealers: Sell to anyone except enemies</li>
+                            <li>Hitman: Only kill with valid hits</li>
+                            <li>Medic: Heal everyone, stay neutral</li>
+                            <li>No job abuse or corruption without RP reason</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rule-category">
+                        <h4>🏠 Building Rules</h4>
+                        <ul>
+                            <li>No prop blocking or killing</li>
+                            <li>Maximum 3 fading doors per base</li>
+                            <li>No invisible/transparent props</li>
+                            <li>Build on your own property only</li>
+                            <li>No floating bases or unrealistic builds</li>
+                            <li>No building during raids</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rule-category">
+                        <h4>💰 Economy Rules</h4>
+                        <ul>
+                            <li>No scamming in trades</li>
+                            <li>Mugging limit: $5000 max</li>
+                            <li>Wait 5 minutes between mugs</li>
+                            <li>No mugging in spawn or shops</li>
+                            <li>Bank raids require 3+ police online</li>
+                            <li>No exploiting money printers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loading messages for DarkRP
+        const loadingMessages = [
+            "Connecting to the streets...",
+            "Loading criminal database...",
+            "Syncing with police records...",
+            "Downloading weapons cache...",
+            "Setting up money printers...",
+            "Preparing job assignments...",
+            "Loading city map...",
+            "Initializing economy system...",
+            "Welcome to DarkRP City!"
+        ];
+
+        let messageIndex = 0;
+        const loadingText = document.getElementById('loadingText');
+
+        function updateLoadingText() {
+            loadingText.style.opacity = '0';
+            setTimeout(() => {
+                loadingText.textContent = loadingMessages[messageIndex];
+                loadingText.style.opacity = '1';
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            }, 300);
+        }
+
+        // Initialize transitions
+        loadingText.style.transition = 'opacity 0.3s ease';
+        
+        // Update loading text every 2.5 seconds
+        setInterval(updateLoadingText, 2500);
+    </script>
+</body>
+</html>
