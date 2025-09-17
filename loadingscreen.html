@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SavageRP - Loading</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 3px; height: 3px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 2px; height: 2px; left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { width: 4px; height: 4px; left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { width: 3px; height: 3px; left: 40%; animation-delay: 0.5s; }
+        .particle:nth-child(5) { width: 2px; height: 2px; left: 50%; animation-delay: 1.5s; }
+        .particle:nth-child(6) { width: 5px; height: 5px; left: 60%; animation-delay: 2.5s; }
+        .particle:nth-child(7) { width: 3px; height: 3px; left: 70%; animation-delay: 0.8s; }
+        .particle:nth-child(8) { width: 2px; height: 2px; left: 80%; animation-delay: 1.8s; }
+        .particle:nth-child(9) { width: 4px; height: 4px; left: 90%; animation-delay: 0.3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .server-name {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .server-subtitle {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Loading bar */
+        .loading-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px 0;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 100%;
+            border-radius: 3px;
+            animation: loading 2s ease-in-out infinite, shimmer 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 75%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .loading-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #b8b8b8;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Rules section */
+        .rules-section {
+            max-width: 100%;
+            width: 100%;
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rules-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #4ecdc4;
+        }
+
+        .rules-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .rules-column {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .rule-number {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .rule-text {
+            color: #e0e0e0;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design for all screen sizes and ratios */
+        @media (max-width: 1200px) {
+            .server-name {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .server-name {
+                font-size: 3rem;
+            }
+            .rules-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .server-name {
+                font-size: 2.5rem;
+            }
+            .rules-title {
+                font-size: 1.5rem;
+            }
+            .container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .server-name {
+                font-size: 2rem;
+            }
+            .server-subtitle {
+                font-size: 1rem;
+            }
+            .rules-title {
+                font-size: 1.3rem;
+            }
+            .rule-item {
+                font-size: 0.8rem;
+            }
+            .rule-number {
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Ultra-wide and large screen adjustments */
+        @media (min-width: 1920px) {
+            .rules-container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Vertical screen adjustments (portrait mode) */
+        @media (max-height: 600px) {
+            .server-name {
+                font-size: 2.5rem;
+                margin-bottom: 5px;
+            }
+            .header {
+                margin-bottom: 20px;
+            }
+            .loading-container {
+                margin: 15px 0;
+            }
+            .rules-section {
+                margin-top: 20px;
+            }
+            .rules-title {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            .rules-column {
+                padding: 15px;
+            }
+            .rule-item {
+                margin-bottom: 10px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Very short screens */
+        @media (max-height: 480px) {
+            .container {
+                justify-content: flex-start;
+                padding-top: 20px;
+            }
+            .server-name {
+                font-size: 2rem;
+            }
+            .rules-title {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            .rule-item {
+                margin-bottom: 8px;
+            }
+            .footer {
+                position: relative;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="server-name">SavageRP</h1>
+            <p class="server-subtitle">DARKRP EXPERIENCE</p>
+        </div>
+
+        <div class="loading-container">
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-text">Loading your experience...</div>
+        </div>
+
+        <div class="rules-section">
+            <h2 class="rules-title">Server Rules</h2>
+            <div class="rules-container">
+                <div class="rules-column">
+                    <div class="rule-item">
+                        <div class="rule-number">1</div>
+                        <div class="rule-text">No RDM (Random Death Match) - Don't kill players without valid RP reason</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">2</div>
+                        <div class="rule-text">No RDA (Random Arrest) - Police must have valid reason to arrest</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">3</div>
+                        <div class="rule-text">Stay in character at all times - Use /ooc for out of character chat</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">4</div>
+                        <div class="rule-text">No FailRP - Act according to your job and roleplay realistically</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">5</div>
+                        <div class="rule-text">No PropKill/PropSpam - Don't kill or annoy players with props</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">6</div>
+                        <div class="rule-text">No MetaGaming - Don't use OOC information for IC advantage</div>
+                    </div>
+                </div>
+                <div class="rules-column">
+                    <div class="rule-item">
+                        <div class="rule-number">7</div>
+                        <div class="rule-text">Follow NLR (New Life Rule) - Forget previous life after death</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">8</div>
+                        <div class="rule-text">No mic spam or earrape - Keep voice chat reasonable</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">9</div>
+                        <div class="rule-text">Respect all players and staff - No harassment or discrimination</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">10</div>
+                        <div class="rule-text">No exploiting or cheating - Play fair and report bugs to staff</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">11</div>
+                        <div class="rule-text">Building rules apply - No prop blocking, fading doors need keypads</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-number">12</div>
+                        <div class="rule-text">Listen to staff members - Their word is final, appeal if needed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Welcome to SavageRP | Have questions? Contact staff in-game</p>
+    </div>
+
+    <script>
+        // Add some interactive loading text
+        const loadingTexts = [
+            "Loading your experience...",
+            "Preparing the city...",
+            "Setting up roleplay...",
+            "Almost ready...",
+            "Welcome to SavageRP!"
+        ];
+        
+        let currentTextIndex = 0;
+        const loadingTextElement = document.querySelector('.loading-text');
+        
+        setInterval(() => {
+            currentTextIndex = (currentTextIndex + 1) % loadingTexts.length;
+            loadingTextElement.textContent = loadingTexts[currentTextIndex];
+        }, 2000);
+
+        // Add some dynamic particle generation
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.width = (Math.random() * 3 + 2) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 6) + 's';
+            
+            document.querySelector('.particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 9000);
+        }
+
+        // Generate particles periodically
+        setInterval(createParticle, 800);
+    </script>
+</body>
+</html>
